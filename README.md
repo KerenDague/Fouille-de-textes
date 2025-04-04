@@ -27,3 +27,11 @@ Les performances sont mesurées à l’aide de plusieurs métriques :
 - **Matrice de confusion**
 
 ---
+
+## 👥 Contributeurs
+
+- [Keren DAGUE](https://github.com/KerenDague)
+- [Maiwenn PLEVENAGE](https://github.com/00parts)
+- [Juliette HENRY](https://github.com/juliettehnr)
+
+---
