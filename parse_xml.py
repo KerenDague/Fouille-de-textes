@@ -18,23 +18,39 @@ def parse_xml(fichier):
             paragraphes = re.findall(r'<paragraphe(.*?)</paragraphe>', point, re.S)
             for p in paragraphes:
 
-                paragraphe = str(re.search(r'<paragraphe.*">', p))
+                code = str(re.search(r'code_grammaire="(.*)" ', p))
+                code_parole = "PAROLE_GENERIQUE"
+                code_disc = "DISC_ARTICLES"
 
-                nom = str(re.findall(r"<nom>.*</nom>", p))
-                nom_clean = str(re.sub(r"</?nom>", r"", nom))
+                if code_disc in code or code_parole in code:
 
-                texte = str(re.findall(r"<texte stime.*</texte>", p))
-                texte_clean = str(re.sub(r"</?texte>", r"", texte))
-                texte_clean = str(re.sub(r'<texte stime="(.*?)">', r"", texte_clean))
-                texte_clean = str(re.sub(r"\\xa0", r" ", texte_clean))
-                texte_clean = str(re.sub(r"(n)?<exposant>(.|..|...)?</exposant>", r"", texte_clean))
-                texte_clean = str(re.sub(r"<br/>", r"", texte_clean))
-                texte_clean = str(re.sub(r"(<italique>(.*?)</italique>|<italique/>)", r"", texte_clean))
-                texte_clean = str(re.sub(r"(\\t)+", r"", texte_clean))
+                    nom = str(re.findall(r"<nom>.*</nom>", p))
+                    mauvais_code = "président"
 
-                discours = {'source' : os.path.basename(fichier), 'paragraphe': paragraphe, 'orateur': nom_clean, 'texte': texte_clean}
-                all_discours.append(discours)
+                    if mauvais_code not in nom:
 
+                        code = code
+
+                        nom = str(re.findall(r"<nom>.*</nom>", p))
+                        nom_clean = str(re.sub(r"</?nom>", r"", nom))
+
+                        texte = str(re.findall(r"<texte stime.*</texte>", p))
+                        texte_clean = str(re.sub(r"</?texte>", r"", texte))
+                        texte_clean = str(re.sub(r'<texte stime="(.*?)">', r"", texte_clean))
+                        texte_clean = str(re.sub(r"\\xa0", r" ", texte_clean))
+                        texte_clean = str(re.sub(r"(n)?<exposant>(.|..|...)?</exposant>", r"", texte_clean))
+                        texte_clean = str(re.sub(r"<br/>", r"", texte_clean))
+                        texte_clean = str(re.sub(r"(<italique>(.*?)</italique>|<italique/>)", r"", texte_clean))
+                        texte_clean = str(re.sub(r"(\\t)+", r"", texte_clean))
+
+                        discours = {'source' : os.path.basename(fichier), 'code': code, 'orateur': nom_clean, 'texte': texte_clean}
+                        all_discours.append(discours)
+
+                    else :
+                        pass
+
+                else:
+                    pass
 
         return all_discours
 '''
@@ -92,7 +108,7 @@ if __name__ == "__main__":
 
     for fichier in liste:
         print(f'source: {fichier.get('source','')}')
-        print(f'paragraphe: {fichier.get('paragraphe','')}')
+        print(f'code: {fichier.get('code','')}')
         print(f'orateur: {fichier.get('orateur','')}')
         print(f'texte: {fichier.get('texte','')}')
         print('\n')
