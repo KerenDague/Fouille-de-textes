@@ -5,8 +5,8 @@ import argparse
 
 
 
-def parse_xml(fichier):
 
+def parse_xml(fichier):
     with open(fichier, "r", encoding='utf-8') as f:
         all_discours = []
 
@@ -15,44 +15,43 @@ def parse_xml(fichier):
         points = re.findall(r'<point(.*?)</point>', texte, re.S)
 
         for point in points:
-            paragraphes = re.findall(r'<paragraphe.*</paragraphe>', point, re.S)
-            for paragraphe in paragraphes:
-                if 'code_grammaire="PAROLE_GENERIQUE"' in paragraphe:
-                    nom = str(re.findall(r"<nom>.*</nom>", paragraphe))
-                    nom_clean = str(re.sub(r"</?nom>", r"", nom))
+            paragraphes = re.findall(r'<paragraphe(.*?)</paragraphe>', point, re.S)
+            for p in paragraphes:
 
-                    texte = str(re.findall(r"<texte stime.*</texte>", paragraphe))
-                    texte_clean = str(re.sub(r"</?texte>", r"", texte))
-                    texte_clean = str(re.sub(r'<texte stime="(.*?)">', r"", texte_clean))
-                    texte_clean = str(re.sub(r"\\xa0", r"", texte_clean))
-                    texte_clean = str(re.sub(r"(n)?<exposant>(.|..|...)?</exposant>", r"", texte_clean))
-                    texte_clean = str(re.sub(r"<br/>", r"", texte_clean))
-                    texte_clean = str(re.sub(r"(<italique>.*</italique>|<italique/>)", r"", texte_clean))
-                    texte_clean = str(re.sub(r"(\\t)+", r"", texte_clean))
+                paragraphe = str(re.search(r'<paragraphe.*">', p))
 
-                    discours = {'source' : os.path.basename(fichier), 'orateur': nom_clean, 'texte': texte_clean}
-                    all_discours.append(discours)
+                nom = str(re.findall(r"<nom>.*</nom>", p))
+                nom_clean = str(re.sub(r"</?nom>", r"", nom))
 
-                else :
-                    pass
+                texte = str(re.findall(r"<texte stime.*</texte>", p))
+                texte_clean = str(re.sub(r"</?texte>", r"", texte))
+                texte_clean = str(re.sub(r'<texte stime="(.*?)">', r"", texte_clean))
+                texte_clean = str(re.sub(r"\\xa0", r" ", texte_clean))
+                texte_clean = str(re.sub(r"(n)?<exposant>(.|..|...)?</exposant>", r"", texte_clean))
+                texte_clean = str(re.sub(r"<br/>", r"", texte_clean))
+                texte_clean = str(re.sub(r"(<italique>(.*?)</italique>|<italique/>)", r"", texte_clean))
+                texte_clean = str(re.sub(r"(\\t)+", r"", texte_clean))
 
-
+                discours = {'source' : os.path.basename(fichier), 'paragraphe': paragraphe, 'orateur': nom_clean, 'texte': texte_clean}
+                all_discours.append(discours)
 
 
         return all_discours
 '''
-    try:
-        tree = ET.parse(fichier)
-    except ParseError :
-        return False
+def parse_xml(fichier):
 
+    tree = ET.parse(fichier)
     root = tree.getroot()
 
     all_discours = []
 
-    for item in root.findall("point"):
-        nom = item.find("nom").text if item.find("nom") is not None else " "
-        texte = item.find("texte").text if item.find("texte") is not None else " "
+    for item in root.iter("point"):
+        paragraphes = item.findall("paragraphe").text
+
+        for item in paragraphes:
+
+        nom = item.findall("nom").text if item.find("nom")
+        texte = item.findall("texte").text if item.find("texte")
 
         discours = {'source' : fichier, 'orateur': nom, 'texte': texte}
         all_discours.append(discours)
@@ -93,6 +92,7 @@ if __name__ == "__main__":
 
     for fichier in liste:
         print(f'source: {fichier.get('source','')}')
+        print(f'paragraphe: {fichier.get('paragraphe','')}')
         print(f'orateur: {fichier.get('orateur','')}')
         print(f'texte: {fichier.get('texte','')}')
         print('\n')
