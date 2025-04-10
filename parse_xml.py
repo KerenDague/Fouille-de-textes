@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import os
 import re
 import argparse
-
+from pathlib import Path
 
 def parse_xml(fichier):
 
@@ -13,6 +13,7 @@ def parse_xml(fichier):
         texte = f.read()
 
         points = re.findall(r'<point(.*?)</point>', texte, re.S)
+
 
         for point in points:
             paragraphes = re.findall(r'<paragraphe(.*?)</paragraphe>', point, re.S)
@@ -76,6 +77,38 @@ def lire_corpus_os(dossier_chemin):
     return fichiers_xml
 
 
+def trier_tendance(textes: list[dict]) :
+    orateurs_gauche = ["M. Manuel Bompard"]
+    orateurs_droite = ["M. Jean-Philippe Tanguy"]
+    orateurs_centre = []
+
+    i = 1
+    
+    
+    dossier_gauche = "./gauche"
+    dossier_droite = "./droite"
+    dossier_centre = "./centre"
+    
+    for texte in textes :
+
+        orateur = texte["orateur"].translate(str.maketrans('', '', "[']"))
+        texte_orateur = texte["texte"].translate(str.maketrans('', '', "[']"))
+
+        if orateur in orateurs_gauche :       
+            with open(f"{dossier_gauche}/{i}.txt", "w") as f :
+                f.write(f"{orateur}\n{texte_orateur}")
+           
+        elif orateur in orateurs_centre :
+            with open(f"{dossier_centre}/{i}.txt", "w") as f :
+                f.write(f"{orateur}\n{texte_orateur}")
+
+        elif orateur in orateurs_droite :
+            with open(f"{dossier_droite}/{i}.txt", "w") as f :
+                f.write(f"{orateur}\n{texte_orateur}")
+        
+        i +=1
+
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -93,9 +126,11 @@ if __name__ == "__main__":
         resultat = parse_xml(file)
         liste.extend(resultat)
 
-    for fichier in liste:
+    trier_tendance(liste)
+
+    '''for fichier in liste:
         print(f'source: {fichier.get('source','')}')
         print(f'code: {fichier.get('code','')}')
         print(f'orateur: {fichier.get('orateur','')}')
         print(f'texte: {fichier.get('texte','')}')
-        print('\n')
+        print('\n')'''
