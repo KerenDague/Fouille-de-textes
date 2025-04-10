@@ -78,12 +78,15 @@ def lire_corpus_os(dossier_chemin):
 
 
 def trier_tendance(textes: list[dict]) :
-    orateurs_gauche = ["M. Manuel Bompard"]
-    orateurs_droite = ["M. Jean-Philippe Tanguy"]
-    orateurs_centre = []
+
+    with open("deputes_gauche.txt", "r") as f :
+        orateurs_gauche = f.read()
+    with open("deputes_droite.txt", "r") as f :
+        orateurs_droite = f.read()
+    with open("deputes_centre.txt", "r") as f :
+        orateurs_centre = f.read()
 
     i = 1
-    
     
     dossier_gauche = "./gauche"
     dossier_droite = "./droite"
@@ -96,15 +99,15 @@ def trier_tendance(textes: list[dict]) :
 
         if orateur in orateurs_gauche :       
             with open(f"{dossier_gauche}/{i}.txt", "w") as f :
-                f.write(f"{orateur}\n{texte_orateur}")
+                f.write(f"{texte_orateur}")
            
         elif orateur in orateurs_centre :
             with open(f"{dossier_centre}/{i}.txt", "w") as f :
-                f.write(f"{orateur}\n{texte_orateur}")
+                f.write(f"{texte_orateur}")
 
         elif orateur in orateurs_droite :
             with open(f"{dossier_droite}/{i}.txt", "w") as f :
-                f.write(f"{orateur}\n{texte_orateur}")
+                f.write(f"{texte_orateur}")
         
         i +=1
 
