@@ -4,10 +4,10 @@ import re
 import argparse
 
 
-
-
 def parse_xml(fichier):
+
     with open(fichier, "r", encoding='utf-8') as f:
+
         all_discours = []
 
         texte = f.read()
@@ -20,31 +20,38 @@ def parse_xml(fichier):
 
                 code = str(re.search(r'code_grammaire="(.*)" ', p))
                 code_parole = "PAROLE_GENERIQUE"
-                code_disc = "DISC_ARTICLES"
+                #code_disc = "DISC_ARTICLES"
 
-                if code_disc in code or code_parole in code:
+                if code_parole in code:
 
                     nom = str(re.findall(r"<nom>.*</nom>", p))
                     mauvais_code = "président"
 
                     if mauvais_code not in nom:
 
-                        code = code
-
-                        nom = str(re.findall(r"<nom>.*</nom>", p))
-                        nom_clean = str(re.sub(r"</?nom>", r"", nom))
-
                         texte = str(re.findall(r"<texte stime.*</texte>", p))
-                        texte_clean = str(re.sub(r"</?texte>", r"", texte))
-                        texte_clean = str(re.sub(r'<texte stime="(.*?)">', r"", texte_clean))
-                        texte_clean = str(re.sub(r"\\xa0", r" ", texte_clean))
-                        texte_clean = str(re.sub(r"(n)?<exposant>(.|..|...)?</exposant>", r"", texte_clean))
-                        texte_clean = str(re.sub(r"<br/>", r"", texte_clean))
-                        texte_clean = str(re.sub(r"(<italique>(.*?)</italique>|<italique/>)", r"", texte_clean))
-                        texte_clean = str(re.sub(r"(\\t)+", r"", texte_clean))
 
-                        discours = {'source' : os.path.basename(fichier), 'code': code, 'orateur': nom_clean, 'texte': texte_clean}
-                        all_discours.append(discours)
+                        if len(texte) >= 2000 :
+
+                            code = code
+
+                            nom = str(re.findall(r"<nom>.*</nom>", p))
+                            nom_clean = str(re.sub(r"</?nom>", r"", nom))
+
+
+                            texte_clean = str(re.sub(r"</?texte>", r"", texte))
+                            texte_clean = str(re.sub(r'<texte stime="(.*?)">', r"", texte_clean))
+                            texte_clean = str(re.sub(r"\\xa0", r" ", texte_clean))
+                            texte_clean = str(re.sub(r"(n)?<exposant>(.|..|...)?</exposant>", r"", texte_clean))
+                            texte_clean = str(re.sub(r"<br/>", r"", texte_clean))
+                            texte_clean = str(re.sub(r"(<italique>(.*?)</italique>|<italique/>)", r"", texte_clean))
+                            texte_clean = str(re.sub(r"(\\t)+", r"", texte_clean))
+
+                            discours = {'source' : os.path.basename(fichier), 'code': code, 'orateur': nom_clean, 'texte': texte_clean}
+                            all_discours.append(discours)
+
+                        else:
+                            pass
 
                     else :
                         pass
@@ -53,27 +60,7 @@ def parse_xml(fichier):
                     pass
 
         return all_discours
-'''
-def parse_xml(fichier):
 
-    tree = ET.parse(fichier)
-    root = tree.getroot()
-
-    all_discours = []
-
-    for item in root.iter("point"):
-        paragraphes = item.findall("paragraphe").text
-
-        for item in paragraphes:
-
-        nom = item.findall("nom").text if item.find("nom")
-        texte = item.findall("texte").text if item.find("texte")
-
-        discours = {'source' : fichier, 'orateur': nom, 'texte': texte}
-        all_discours.append(discours)
-
-    return all_discours
-'''
 
 def lire_corpus_os(dossier_chemin):
 
