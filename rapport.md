@@ -75,17 +75,17 @@ En résumé, le modèle ZeroR n’a aucune capacité prédictive. Il sert unique
 
 ### C – Naive Bayes
 
-![Naive Bayes](resutats_weka/NaiveBayes.png)
+![Naive Bayes](resultats_weka/NaiveBayes.png)
 
 Naive Bayes est un modèle probabiliste qui part de l’hypothèse que les attributs sont indépendants les uns des autres. Le modèle calcule un score par classe pour chaque document, et choisit la classe avec le plus grand score.
 
 Ici, nous avons tout d’abord utilisé le modèle de base de Naive Bayes. Comme nous pouvons le voir, nous avons des résultats étranges, puisque le modèle choisit de ne tout simplement pas classifier 80% du corpus. Nous avons seulement 9,4% de documents bien classés, et 10,6% de documents mal classés. Pourtant, lorsque l’on regarde le modèle qu’il a généré, nous voyons qu’il calcule bien les probabilités d’apparition d’un mot pour chaque classe.
 
-![Naive Bayes](resutats_weka/NaiveBayes_proba_attributs.png)
+![Naive Bayes](resultats_weka/NaiveBayes_proba_attributs.png)
 
 Nous avons alors décidé d’essayer une autre variante du modèle, qui s’appelle Naive Bayes Multinomial et qui est censé être plus adapté pour les tâches de classification impliquant des occurrences de mots ainsi qu’une grande quantité d’attributs, ce qui est le cas de notre corpus. Nous obtenons alors les résultats ci-dessous :
 
-![Naive Bayes Multinomial](resutats_weka/NaiveBayesMultinomial.png)
+![Naive Bayes Multinomial](resultats_weka/NaiveBayesMultinomial.png)
 
 Comme nous pouvons le voir, le modèle fonctionne beaucoup mieux. 999 documents (soit 64% du corpus) sont bien classés, contre 559 documents (soit 36% du corpus) qui sont mal classés. Le coefficient Kappa est de 0.4225, ce qui montre que le modèle fait modérément mieux que le hasard. L’erreur absolue moyenne est de 0.2401 et l’erreur quadratique moyenne est de 0.4758. Cette dernière se situant en dessous de 0.5, nous pouvons dire que le modèle prédit de manière relativement fiable les classes.
 
@@ -97,7 +97,7 @@ Nous pouvons ainsi dire que ce modèle offre une performance acceptable, avec un
 
 Nous jugeons bon également de préciser que pour une raison qui nous échappe, bien que Naive Bayes nous affiche les probabilités de chaque mot pour chaque classe sans parvenir à classer 80% du corpus, Naive Bayes Multinomial nous affiche des probabilités de 0 pour chaque mot, alors qu’il parvient à classifier les documents de manière pertinente.
 
-![Naive Bayes Multinomial](resutats_weka/NaiveBayesMultinomial_proba_attributs.png)
+![Naive Bayes Multinomial](resultats_weka/NaiveBayesMultinomial_proba_attributs.png)
 
 ### D – J48
 
