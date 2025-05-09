@@ -12,20 +12,33 @@ Ce projet a pour objectif de **créer et entraîner un classifieur automatique**
 
 ## 🔍 Données
 
-Les données sont composées de discours politiques annotés selon le bord politique de leur auteur.  
-Le prétraitement inclut :
-
-- Nettoyage des textes
+- **Source** : [Open Data de l'Assemblée nationale](https://data.assemblee-nationale.fr/travaux-parlementaires/debats)
+- **Période couverte** : juillet 2024 à mars 2025
+- **Structure** : XML
+- **Nettoyage** : Suppression des interruptions ou des interventions trop courtes...
+- **Répartition finale** :
+  - Gauche : 638 documents
+  - Centre : 595 documents
+  - Droite : 325 documents
 
 ---
 
-## 📈 Évaluation
+## 🧪 Méthodologie
 
-Les performances sont mesurées à l’aide de plusieurs métriques :
+1. **Prétraitement**
+   - Parsing XML, nettoyage, filtrage
+   - Constitution des sous-corpus par classe
 
-- **F1-score** 
-- **Matrice de confusion**
+2. **Modélisation**
+   - Application de plusieurs classifieurs via WEKA :
+     - ZeroR (baseline)
+     - Naive Bayes & Naive Bayes Multinomial
+     - J48 (arbre de décision)
+     - SVM (Support Vector Machine)
 
+3. **Évaluation**
+   - Validation croisée 10 folds
+   - Métriques : Accuracy, Kappa, F1-score et Matrices de confusion
 ---
 
 ## 👥 Contributeurs
